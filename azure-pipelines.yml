@@ -1,0 +1,34 @@
+trigger:
+- main  # Trigger pipeline on changes to the 'main' branch
+
+pool:
+  name: MyPools
+  demands:
+    - agent.name -equals MyAgent
+
+steps:
+# Step 1: Checkout the code
+- task: Checkout@1
+  displayName: 'Checkout source code'
+  inputs:
+    clean: true
+
+# Step 2: Install Node.js using NodeTool
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'  # Specify the Node.js version required by your project
+  displayName: 'Install Node.js'
+
+# Step 3: Install project dependencies and build the project
+- script: |
+    npm install
+    npm run build
+  displayName: 'Install dependencies and build the project'
+
+# Step 4: Publish build artifacts
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Build Artifacts'
+  inputs:
+    pathtoPublish: 'dist'  # Adjust the path if the build output is different
+    artifactName: 'react-node-build'
+    publishLocation: 'Container'
