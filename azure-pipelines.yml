@@ -1,34 +1,46 @@
 trigger:
-- main  # Trigger pipeline on changes to the 'main' branch
+- main
 
 pool:
-  name: MyPools
+  name: MyPools  # Self-hosted agent pool
   demands:
     - agent.name -equals MyAgent
 
 steps:
-# Step 1: Checkout the code
-- task: Checkout@1
-  displayName: 'Checkout source code'
+# Step 1: Install Node.js
+- task: NodeTool@0
   inputs:
-    clean: true
+    versionSpec: '14.x'  # Compatible with project
+  displayName: 'Install Node.js'
 
-# # Step 2: Install Node.js using NodeTool
-# - task: NodeTool@0
-#   inputs:
-#     versionSpec: '20.x'  # Specify the Node.js version required by your project
-#   displayName: 'Install Node.js'
+# Step 2: Install dependencies
+- script: |
+    npm install
+  displayName: 'Install Dependencies'
 
-# # Step 3: Install project dependencies and build the project
-# - script: |
-#     npm install
-#     npm run build
-#   displayName: 'Install dependencies and build the project'
+# Step 3: Build the project
+- script: |
+    npm run build
+  displayName: 'Build React Project'
 
-# # Step 4: Publish build artifacts
-# - task: PublishBuildArtifacts@1
-#   displayName: 'Publish Build Artifacts'
-#   inputs:
-#     pathtoPublish: 'dist'  # Adjust the path if the build output is different
-#     artifactName: 'react-node-build'
-#     publishLocation: 'Container'
+# Step 4: Debug directory structure
+- script: |
+    dir "$(System.DefaultWorkingDirectory)"
+    dir "$(System.DefaultWorkingDirectory)\build"
+  displayName: 'Debug Directory Structure'
+
+# Step 5: Check build directory
+- script: |
+    if not exist "$(System.DefaultWorkingDirectory)\build" (
+      echo "Error: Build directory not found!"
+      exit 1
+    )
+  displayName: 'Check Build Directory'
+
+# Step 6: Publish build artifacts
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(System.DefaultWorkingDirectory)\build'
+    ArtifactName: 'react-build'
+    publishLocation: 'Container'
+  displayName: 'Publish Build Artifacts'
