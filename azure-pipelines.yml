@@ -1,16 +1,19 @@
 trigger:
-- main
+- main  # Trigger on changes to the 'main' branch
 
 pool:
-  name: MyPools  # Self-hosted agent pool
+  name: MyPools
   demands:
     - agent.name -equals MyAgent
+
+variables:
+  buildConfiguration: 'Release' # You can use this to mimic Debug/Release separation
 
 steps:
 # Step 1: Install Node.js
 - task: NodeTool@0
   inputs:
-    versionSpec: '14.x'  # Compatible with project
+    versionSpec: '14.x'  # Use the version compatible with your project
   displayName: 'Install Node.js'
 
 # Step 2: Install dependencies
@@ -20,27 +23,35 @@ steps:
 
 # Step 3: Build the project
 - script: |
+    echo "Build Configuration: $(buildConfiguration)"
     npm run build
   displayName: 'Build React Project'
 
-# # Step 4: Debug directory structure
-# - script: |
-#     dir "$(System.DefaultWorkingDirectory)"
-#     dir "$(System.DefaultWorkingDirectory)\build"
-#   displayName: 'Debug Directory Structure'
+# Step 4: Copy build output to Build.BinariesDirectory
+- script: |
+    $sourcePath = "$(System.DefaultWorkingDirectory)/build"
+    $destinationPath = "$(Build.BinariesDirectory)"
+    echo "Copying build output to: $destinationPath"
+    if (!(Test-Path -Path $destinationPath)) {
+        New-Item -ItemType Directory -Path $destinationPath
+    }
+    Copy-Item -Path "$sourcePath/*" -Destination $destinationPath -Recurse -Force
+  displayName: 'Copy Build Output to Build.BinariesDirectory'
 
-# # Step 5: Check build directory
-# - script: |
-#     if not exist "$(System.DefaultWorkingDirectory)\build" (
-#       echo "Error: Build directory not found!"
-#       exit 1
-#     )
-#   displayName: 'Check Build Directory'
+# Step 5: Compress the build output into a .zip file
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/react_build_output.zip'
+    replaceExistingArchive: true
+  displayName: 'Compress Build Output to ZIP'
 
-# Step 6: Publish build artifacts
+# Step 6: Publish the .zip file as a build artifact
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)\build'
-    ArtifactName: 'react-build'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/react_build_output.zip'
+    ArtifactName: 'react-drop'
     publishLocation: 'Container'
   displayName: 'Publish Build Artifacts'
