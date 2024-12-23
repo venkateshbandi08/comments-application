@@ -28,14 +28,15 @@ steps:
   displayName: 'Build React Project'
 
 # Step 4: Copy build output to Build.BinariesDirectory
-- script: |
-    $sourcePath = "$(System.DefaultWorkingDirectory)/build"
+- powershell: |
+    $sourcePath = "$(System.DefaultWorkingDirectory)\build"
     $destinationPath = "$(Build.BinariesDirectory)"
-    echo "Copying build output to: $destinationPath"
+    Write-Host "Copying build output to: $destinationPath"
+
     if (!(Test-Path -Path $destinationPath)) {
         New-Item -ItemType Directory -Path $destinationPath
     }
-    Copy-Item -Path "$sourcePath/*" -Destination $destinationPath -Recurse -Force
+    Copy-Item -Path "$sourcePath\*" -Destination $destinationPath -Recurse -Force
   displayName: 'Copy Build Output to Build.BinariesDirectory'
 
 # Step 5: Compress the build output into a .zip file
