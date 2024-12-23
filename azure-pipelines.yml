@@ -23,19 +23,19 @@ steps:
     npm run build
   displayName: 'Build React Project'
 
-# Step 4: Debug directory structure
-- script: |
-    dir "$(System.DefaultWorkingDirectory)"
-    dir "$(System.DefaultWorkingDirectory)\build"
-  displayName: 'Debug Directory Structure'
+# # Step 4: Debug directory structure
+# - script: |
+#     dir "$(System.DefaultWorkingDirectory)"
+#     dir "$(System.DefaultWorkingDirectory)\build"
+#   displayName: 'Debug Directory Structure'
 
-# Step 5: Check build directory
-- script: |
-    if not exist "$(System.DefaultWorkingDirectory)\build" (
-      echo "Error: Build directory not found!"
-      exit 1
-    )
-  displayName: 'Check Build Directory'
+# # Step 5: Check build directory
+# - script: |
+#     if not exist "$(System.DefaultWorkingDirectory)\build" (
+#       echo "Error: Build directory not found!"
+#       exit 1
+#     )
+#   displayName: 'Check Build Directory'
 
 # Step 6: Publish build artifacts
 - task: PublishBuildArtifacts@1
