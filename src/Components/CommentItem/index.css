@@ -26,9 +26,6 @@
     background-color: #0ea5e9;
   }
   
-  /* Write your CSS here */
-  .comment-container {
-  }
   .comment-top-content-container {
     display: flex;
     flex-direction: row;
@@ -49,8 +46,6 @@
     justify-content: center;
     align-items: center;
     margin-top: -20px;
-  }
-  .logo-letter {
   }
   .comment-name-time-comment-container {
     margin-left: 15px;
