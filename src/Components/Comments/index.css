@@ -1,0 +1,96 @@
+/* Write your CSS here */
+.bg-container {
+    height: 100vh;
+    background-size: cover;
+    padding-left: 300px;
+    padding-right: 300px;
+  }
+  .comments-app-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .comments-app-top-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .comments-main-heading {
+    color: #1e293b;
+    font-size: 40px;
+    font-family: 'Roboto';
+    font-weight: bold;
+  }
+  .description {
+    color: #475569;
+    font-family: 'Roboto';
+    font-weight: bold;
+  }
+  .input-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .name-input-container {
+    width: 320px;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #7e858e;
+    border-radius: 3px;
+    outline: none;
+    font-size: 17px;
+    margin-bottom: 17px;
+    font-family: 'Roboto';
+  }
+  .comment-input-container {
+    padding: 10px;
+    border: 1px solid #7e858e;
+    border-radius: 3px;
+    outline: none;
+    font-size: 17px;
+    font-family: 'Roboto';
+  }
+  .add-comment-button {
+    background-color: #0284c7;
+    font-family: 'Roboto';
+    color: #dee0e3;
+    height: 35px;
+    width: 140px;
+    cursor: pointer;
+    outline: none;
+    border: 0px solid;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+  .comments-top-image {
+    margin-bottom: 20px;
+  }
+  .horizantal-line {
+    margin-top: -10px;
+  }
+  .comments-app-bottom-container {
+  }
+  
+  .count-comments-heading {
+    color: #475569;
+    font-family: 'Roboto';
+    font-weight: bold;
+    margin-top: -5px;
+  }
+  .count-of-comments {
+    color: #ffffff;
+    background-color: #0ea5e9;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 1px;
+    margin-right: 10px;
+  }
+  ul {
+    list-style-type: none;
+  }
